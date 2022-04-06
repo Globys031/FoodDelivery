@@ -59,30 +59,30 @@ namespace FoodDelivery.Data
             }
             context.SaveChanges();
         }
+        // Initializes users and roles
         public static void InitializeUsers(ApplicationDbContext context)
         {
-
             context.Database.EnsureCreated();
 
-            //// Look for any users.
-            //if (context.Users.Any())
-            //{
-            //    return;   // DB has been seeded
-            //}
+            // Look for any users.
+            if (context.Users.Any())
+            {
+                return;   // DB has been seeded
+            }
+
+            //var roleManager = RoleManager<IdentityRole>();
 
 
             // Added this user simply so that I would be able to use .HashPassword. Every user will be using the same password for easier access.
-            /////////////////////
-            /// Didn't work for whatever reason. Check if the database actually added this user properly.
             IdentityUser applicationUser = new IdentityUser();
             Guid guid = Guid.NewGuid();
             applicationUser.Id = guid.ToString();
             applicationUser.UserName = "Joe";
+            applicationUser.NormalizedUserName = "JOE";
             applicationUser.Email = "wx@hotmail.com";
-            applicationUser.NormalizedUserName = "wx@hotmail.com";
+            applicationUser.EmailConfirmed = true;
 
             context.Users.Add(applicationUser);
-
 
             PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>(); 
 
@@ -94,14 +94,13 @@ namespace FoodDelivery.Data
             //////////////////////
 
 
-
             // Lets say there's no order or restaurant with ID=0 (because if not set, it'll default to 0
             var users = new IdentityUser[]
             {
-            new IdentityUser{UserName="NormalUser", Email="NormalUser@email.com", PasswordHash="3456yhdfG`Hw23dfs"},
-            new IdentityUser{UserName="AdministratorUser", Email="NormalUser@email.com", PasswordHash=hashedPassword},
-            new IdentityUser{UserName="RestaurantManagerUser", Email="NormalUser@email.com", PasswordHash=hashedPassword},
-            new IdentityUser{UserName="CourierUser", Email="NormalUser@email.com", PasswordHash=hashedPassword},
+            new IdentityUser{UserName="NormalUser", NormalizedUserName="NORMALUSER", Email="NormalUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
+            new IdentityUser{UserName="AdministratorUser", NormalizedUserName="ADMINISTRATORUSER", Email="AdministratorUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
+            new IdentityUser{UserName="RestaurantManagerUser", NormalizedUserName="RESTAURANTMANAGERUSER", Email="RestaurantManagerUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
+            new IdentityUser{UserName="CourierUser", NormalizedUserName="COURIERUSER", Email="CourierUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
             };
             foreach (IdentityUser user in users)
             {
