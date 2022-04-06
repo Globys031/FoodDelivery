@@ -15,3 +15,5 @@ Drop-Database -Confirm -Context MealContext     (MealContext is just an example)
 Most of the code right now was written by following these sources:
 https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-6.0&tabs=visual-studio
 https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/working-with-sql?view=aspnetcore-6.0&tabs=visual-studio
+https://www.yogihosting.com/aspnet-core-identity-roles/#create-delete-roles
+https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-6.0&tabs=visual-studio
