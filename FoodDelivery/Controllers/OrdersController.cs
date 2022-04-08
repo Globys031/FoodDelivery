@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using FoodDelivery.Data;
 using FoodDelivery.Models;
 
-namespace FoodDelivery.OrderManagement.Controllers
+namespace FoodDelivery.Controllers
 {
     public class OrdersController : Controller
     {

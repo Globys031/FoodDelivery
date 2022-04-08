@@ -17,3 +17,7 @@ https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-6.
 https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/working-with-sql?view=aspnetcore-6.0&tabs=visual-studio
 https://www.yogihosting.com/aspnet-core-identity-roles/#create-delete-roles
 https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-6.0&tabs=visual-studio
+
+***IMPORTANT***
+Currently the database doesn't recognise that a different role was assigned to a user until you log out and log back in.
+Furthermore, I was not able to declare an instance of UserManager in DbInitializer.cs, so you'll have to assign roles manually via GUI.

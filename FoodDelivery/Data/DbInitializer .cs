@@ -1,4 +1,5 @@
 ﻿using FoodDelivery.Models;
+using FoodDelivery.Controllers;
 using Microsoft.AspNetCore.Identity;
 
 namespace FoodDelivery.Data
@@ -44,8 +45,6 @@ namespace FoodDelivery.Data
             }
             context.SaveChanges();
 
-
-
             var orders = new Order[]
             {
             new Order{Order_date=DateTime.Parse("2005-09-01"),State=Order.Order_State.paid_for},
@@ -59,7 +58,31 @@ namespace FoodDelivery.Data
             }
             context.SaveChanges();
         }
-        // Initializes users and roles
+
+        // Initialize Roles
+        public static void InitializeRoles(ApplicationDbContext context)
+        {
+            context.Database.EnsureCreated();
+
+            // Look for any roles.
+            if (context.Roles.Any())
+            {
+                return;   // DB has been seeded
+            }
+
+            var roles = new IdentityRole[]
+            {
+            new IdentityRole{Name="Administrator",NormalizedName="ADMINISTRATOR"},
+            new IdentityRole{Name="RestaurantRepresentative",NormalizedName="RESTAURANTREPRESENTATIVE"},
+            new IdentityRole{Name="Courier",NormalizedName="COURIER"},
+            };
+            foreach (IdentityRole role in roles)
+            {
+                context.Roles.Add(role);
+            }
+            context.SaveChanges();
+        }
+        // Initializes users
         public static void InitializeUsers(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
@@ -70,38 +93,24 @@ namespace FoodDelivery.Data
                 return;   // DB has been seeded
             }
 
-            //var roleManager = RoleManager<IdentityRole>();
+            PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
+            var hashedPassword = passwordHasher.HashPassword(new IdentityUser(), "3456yhdfG`Hw23dfs");
 
-
-            // Added this user simply so that I would be able to use .HashPassword. Every user will be using the same password for easier access.
-            IdentityUser applicationUser = new IdentityUser();
-            Guid guid = Guid.NewGuid();
-            applicationUser.Id = guid.ToString();
-            applicationUser.UserName = "Joe";
-            applicationUser.NormalizedUserName = "JOE";
-            applicationUser.Email = "wx@hotmail.com";
-            applicationUser.EmailConfirmed = true;
-
-            context.Users.Add(applicationUser);
-
-            PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>(); 
-
-            var hashedPassword = passwordHasher.HashPassword(applicationUser, "3456yhdfG`Hw23dfs");
-            applicationUser.SecurityStamp = Guid.NewGuid().ToString();
-            applicationUser.PasswordHash = hashedPassword;
-
-            context.SaveChanges();
-            //////////////////////
-
-
-            // Lets say there's no order or restaurant with ID=0 (because if not set, it'll default to 0
             var users = new IdentityUser[]
             {
+            new IdentityUser{UserName = "Joe",NormalizedUserName = "JOE",Email = "wx@hotmail.com",EmailConfirmed = true,PasswordHash = hashedPassword },
             new IdentityUser{UserName="NormalUser", NormalizedUserName="NORMALUSER", Email="NormalUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
             new IdentityUser{UserName="AdministratorUser", NormalizedUserName="ADMINISTRATORUSER", Email="AdministratorUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
             new IdentityUser{UserName="RestaurantManagerUser", NormalizedUserName="RESTAURANTMANAGERUSER", Email="RestaurantManagerUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
             new IdentityUser{UserName="CourierUser", NormalizedUserName="COURIERUSER", Email="CourierUser@email.com", EmailConfirmed=true, PasswordHash=hashedPassword},
             };
+
+            //UserManager<IdentityUser> userManager = new UserManager<IdentityUser>();
+
+            //userManager.AddToRoleAsync(users[2], "Administrator");
+            //userManager.AddToRoleAsync(users[3], "RestaurantRepresentative");
+            //userManager.AddToRoleAsync(users[4], "Courier");
+
             foreach (IdentityUser user in users)
             {
                 context.Users.Add(user);

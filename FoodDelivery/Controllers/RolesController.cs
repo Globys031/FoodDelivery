@@ -12,7 +12,7 @@ namespace FoodDelivery.Controllers
 {
     public class RolesController : Controller
     {
-        public RoleManager<IdentityRole> roleManager { get; private set; }
+        public RoleManager<IdentityRole> roleManager { get; set; }
         public UserManager<IdentityUser> userManager { get; private set; }
 
         public RolesController(RoleManager<IdentityRole> roleMgr, UserManager<IdentityUser> userMrg)
@@ -63,6 +63,11 @@ namespace FoodDelivery.Controllers
             List<IdentityUser> nonMembers = new List<IdentityUser>();
             foreach (IdentityUser user in userManager.Users)
             {
+                //var userRoles = await userManager.GetRolesAsync(user);
+
+                //var test = userRoles[0] == "RestaurantRepresentative";
+
+
                 var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
                 list.Add(user);
             }

@@ -1,15 +1,13 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FoodDelivery.Data;
 using FoodDelivery.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace FoodDelivery.MealManagement.Controllers
+using FoodDelivery.Controllers;
+
+namespace FoodDelivery.Controllers
 {
     public class MealsController : Controller
     {
@@ -67,6 +65,7 @@ namespace FoodDelivery.MealManagement.Controllers
         }
 
         // GET: Meals/Edit/5
+        [Authorize(Roles = "RestaurantRepresentative")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -118,6 +117,7 @@ namespace FoodDelivery.MealManagement.Controllers
         }
 
         // GET: Meals/Delete/5
+        [Authorize(Roles = "RestaurantRepresentative")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,6 +147,48 @@ namespace FoodDelivery.MealManagement.Controllers
         }
 
         private bool MealExists(int id)
+        {
+            return _context.Meals.Any(e => e.ID == id);
+        }
+
+
+        // GET: Meals/AddToOrder/5
+        public async Task<IActionResult> AddToOrder(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var meal = await _context.Meals
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (meal == null)
+            {
+                return NotFound();
+            }
+
+            return View("/Views/Meals/Index.cshtml", await _context.Meals.ToListAsync());
+        }
+
+
+        // TO DO:
+        // Modify user entity so that he'd have "currentOrderID".
+        // Modify order entity so that they'd track IDs of all meals
+        // WITHOUT the above mentioned, this feature won't be full implemented
+        //
+        //
+        // POST: Meals/AddToOrder/5
+        [HttpPost, ActionName("AddToOrder")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToOrderConfirmed(int id)
+        {
+            var meal = await _context.Meals.FindAsync(id);
+            //_context.Orders.Add(meal);
+            //await _context.SaveChangesAsync();
+            return View("/Views/Meals/Index.cshtml", await _context.Meals.ToListAsync());
+        }
+
+        private bool AlreadyInOrder(int id)
         {
             return _context.Meals.Any(e => e.ID == id);
         }
