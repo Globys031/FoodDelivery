@@ -16,7 +16,6 @@ namespace FoodDelivery.Data
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<OrderedMeal> OrderedMeals { get; set; }
         public DbSet<Payment> Payments { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Meal>().ToTable("Meal");
