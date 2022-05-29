@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using FoodDelivery.Data;
 using FoodDelivery.Models;
 using Microsoft.AspNetCore.Identity;
+using static FoodDelivery.Models.OrderDetailViewModel;
 
 namespace FoodDelivery.Controllers
 {
@@ -44,7 +45,16 @@ namespace FoodDelivery.Controllers
                 return NotFound();
             }
 
-            return View(order);
+            var ordered_meals = _context.OrderedMeals.Where(x => x.Order_ID == id).Select(x => x);
+            var info = ordered_meals.Join(_context.Meals, oMeal => oMeal.Meal_ID, meal => meal.ID, (oMeal, meal) => new TMealList
+            {
+                Name = meal.Name,
+                Amount = oMeal.Amount,
+                Price = meal.Price
+            });
+            var totalPrice = Math.Round(info.Sum(x => x.Amount * x.Price),2);
+            OrderDetailViewModel detail = new OrderDetailViewModel(info, totalPrice, order);
+            return View(detail);
         }
 
         // GET: Orders/Create
