@@ -2,21 +2,31 @@
 
 @{
     ViewData["Title"] = "Index";
+    IEnumerable<Restaurant> restaurants = ViewData["Restaurants"] as IEnumerable<Restaurant>;
+    //IEnumerable<Meal> meals = ViewData["Meals"] as IEnumerable<Meal>;
 }
 
-<h1>Index</h1>
+<h1>List Of Meals</h1>
+<br></br>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("RestaurantRepresentative"))
+{
+    <p><a asp-action="Create">Create New Meal</a></p>
+}
+<h2>Please choose the restaurant</h2>
+@*@using(Html.BeginForm("getMeals","Meals", FormMethod.Get,new{id = 1}))
+{
+    Html.DropDownList("Name", 
+    (SelectList) ViewData["Restaurants"],"--Select One--");
+
+    <input type='submit' value='Select'/>
+}*@
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Restaurant_ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Order_ID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -40,10 +50,7 @@
                 @Html.DisplayFor(modelItem => item.Restaurant_ID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Order_ID)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.ID">
+                <a asp-action="MealView" asp-route-id="@item.ID">
                     @Html.DisplayFor(modelItem => item.Name)
                 </a> 
             </td>

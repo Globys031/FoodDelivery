@@ -13,9 +13,9 @@ namespace FoodDelivery.Controllers
 {
     public class RestaurantsController : Controller
     {
-        private readonly MealContext _context;
+        private readonly ProgramContext _context;
 
-        public RestaurantsController(MealContext context)
+        public RestaurantsController(ProgramContext context)
         {
             _context = context;
         }

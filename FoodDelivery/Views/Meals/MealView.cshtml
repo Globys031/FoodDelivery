@@ -2,7 +2,7 @@
 @inject UserManager<IdentityUser> UserManager
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "MealView";
 }
 
 <h1>Details</h1>
@@ -52,5 +52,5 @@
     <a asp-action="Index">Back to List</a>
 </div>
 <div>
-    <a asp-action="Index" asp-route-id="@Model?.ID">Add to Order</a> |
+    @Html.ActionLink("Add To Order", "initiateAdditionToOrder","Meals", new {id = @Context.GetRouteData().Values["id"], userName = @User.Identity?.Name}, null)
 </div>

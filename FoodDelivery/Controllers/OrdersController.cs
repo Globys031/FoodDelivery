@@ -8,23 +8,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FoodDelivery.Data;
 using FoodDelivery.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FoodDelivery.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly MealContext _context;
+        private readonly ProgramContext _context;
+        private readonly UserManager<IdentityUser> users;
 
-        public OrdersController(MealContext context)
+        public OrdersController(ProgramContext context, UserManager<IdentityUser> user)
         {
             _context = context;
+            users = user;
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        /*public async Task<IActionResult> Index()
         {
             return View(await _context.Orders.ToListAsync());
-        }
+        }*/
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -149,6 +152,25 @@ namespace FoodDelivery.Controllers
         private bool OrderExists(int id)
         {
             return _context.Orders.Any(e => e.ID == id);
+        }
+
+        public ActionResult Index()
+        {
+            if (!User.IsInRole("Administrator")) 
+            {
+                if (User.IsInRole("RestaurantRepresentative"))
+                {
+                    var user_id = users.Users.Where(x => x.UserName == User.Identity.Name)
+                        .Select(x => x.Id).SingleOrDefault();
+                    var rez_id = _context.Restaurants.Where(x => x.User_ID == user_id)
+                        .Select(x => x.ID).SingleOrDefault();
+                    var carts = _context.Carts.Where(x => x.Rest_ID == rez_id).Select(x => x.ID);
+                    var orders = _context.Orders.Where(x => carts.Contains(x.Cart_ID)).Select(x => x);
+                    return View("Index",orders);
+                }
+                return View("Index"); 
+            }
+            else return View("Views/Shared/_LoginPartial");
         }
     }
 }

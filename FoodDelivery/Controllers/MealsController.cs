@@ -6,21 +6,25 @@ using FoodDelivery.Models;
 using Microsoft.AspNetCore.Authorization;
 
 using FoodDelivery.Controllers;
+using Microsoft.AspNetCore.Identity;
 
 namespace FoodDelivery.Controllers
 {
     public class MealsController : Controller
     {
-        private readonly MealContext _context;
+        private readonly ProgramContext _context;
+        private readonly UserManager<IdentityUser> users;
 
-        public MealsController(MealContext context)
+        public MealsController(ProgramContext context, UserManager<IdentityUser> user)
         {
             _context = context;
+            users = user;
         }
 
         // GET: Meals
         public async Task<IActionResult> Index()
         {
+            ViewData["Restaurants"] = _context.Restaurants.Select(x => x);
             return View(await _context.Meals.ToListAsync());
         }
 
@@ -185,12 +189,50 @@ namespace FoodDelivery.Controllers
             var meal = await _context.Meals.FindAsync(id);
             //_context.Orders.Add(meal);
             //await _context.SaveChangesAsync();
-            return View("/Views/Meals/Index.cshtml", await _context.Meals.ToListAsync());
+            return View("/Views/Meals/Edit.cshtml", await _context.Meals.ToListAsync());
         }
 
         private bool AlreadyInOrder(int id)
         {
             return _context.Meals.Any(e => e.ID == id);
+        }
+        //mano
+
+        public ActionResult MealView()
+        {
+            return View();
+        }
+        public ActionResult getMeals(int res_id)
+        {
+            var meals = _context.Meals.Where(x => x.Restaurant_ID == res_id).Select(x => x);
+            return View(meals);
+        }
+        public ActionResult initiateAdditionToOrder(int id, string userName)
+        {
+            bool flag = _context.Meals.Any(e => e.ID == id);
+            if (flag)
+            {
+                string userID = users.Users.Where(e => e.UserName == userName).Select(e => e.Id).SingleOrDefault();
+                int cartID = _context.Carts.Where(e => e.User_ID == userID && e.Cond == 0).Select(e => e.ID).SingleOrDefault();
+                if (cartID > 0)
+                {
+                    _context.OrderedMeals.Add(new OrderedMeal { Amount = 1, Meal_ID = id, Cart_ID = cartID });
+                    
+                }
+                else
+                {
+                    _context.Carts.Add(new Cart { Sum = 0, Cond = 0, User_ID = userID });
+                    _context.OrderedMeals.Add(new OrderedMeal { Amount = 1, Meal_ID = id, Cart_ID = cartID });
+                }
+                _context.SaveChanges();
+                return View("Index", _context.Meals.ToList());
+            }
+            else return View("Index", showOrderErrorMessage());
+        }
+        public string showOrderErrorMessage()
+        {
+            var message = "This meal is not avaliable";
+            return message;//View(message);
         }
     }
 }

@@ -6,10 +6,9 @@ namespace FoodDelivery.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(MealContext context)
+        public static void Initialize(ProgramContext context)
         {
             context.Database.EnsureCreated();
-
             // Look for any meals.
             if (context.Meals.Any())
             {
@@ -19,13 +18,13 @@ namespace FoodDelivery.Data
             // Lets say there's no order or restaurant with ID=0 (because if not set, it'll default to 0
             var meals = new Meal[]
             {
-            new Meal{Restaurant_ID=1,Order_ID=1,Name="Bulves su kefyru",Price=20.0,Description="Isivaizduok pardavinet bulves su kefyru restorane",Image_file_path=""},
-            new Meal{Restaurant_ID=1,Order_ID=2,Name="Cepelinai",Price=3.99,Description="Cepelinai aprasymas",Image_file_path=""},
-            new Meal{Restaurant_ID=1,Order_ID=3,Name="Grikiai su sviestu",Price=2,Description="aprasymas",Image_file_path=""},
-            new Meal{Restaurant_ID=2,Order_ID=4,Name="Fri bulvytes",Price=4,Description="aprasymas",Image_file_path=""},
-            new Meal{Restaurant_ID=2,Order_ID=4,Name="Sumustiniai su nutella",Price=10.95,Description="Norejau rasyt sumustiniai su kefyru",Image_file_path=""},
-            new Meal{Restaurant_ID=2,Order_ID=4,Name="Plovas",Price=6,Description="Plovas aprasymas",Image_file_path=""},
-            new Meal{Restaurant_ID=2,Order_ID=4,Name="Vistienos slauneles",Price=7,Description="Vistienos slauneles aprasymas",Image_file_path=""}
+            new Meal{Restaurant_ID=1,Name="Bulves su kefyru",Price=20.0,Description="Isivaizduok pardavinet bulves su kefyru restorane",Image_file_path=""},
+            new Meal{Restaurant_ID=1,Name="Cepelinai",Price=3.99,Description="Cepelinai aprasymas",Image_file_path=""},
+            new Meal{Restaurant_ID=1,Name="Grikiai su sviestu",Price=2,Description="aprasymas",Image_file_path=""},
+            new Meal{Restaurant_ID=2,Name="Fri bulvytes",Price=4,Description="aprasymas",Image_file_path=""},
+            new Meal{Restaurant_ID=2,Name="Sumustiniai su nutella",Price=10.95,Description="Norejau rasyt sumustiniai su kefyru",Image_file_path=""},
+            new Meal{Restaurant_ID=2,Name="Plovas",Price=6,Description="Plovas aprasymas",Image_file_path=""},
+            new Meal{Restaurant_ID=2,Name="Vistienos slauneles",Price=7,Description="Vistienos slauneles aprasymas",Image_file_path=""}
             };
             foreach (Meal meal in meals)
             {

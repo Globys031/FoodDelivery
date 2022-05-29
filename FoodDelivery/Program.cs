@@ -15,7 +15,7 @@ builder.Services.AddDbContext<FoodDeliveryContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Add context for meal related data
-builder.Services.AddDbContext<MealContext>(options =>
+builder.Services.AddDbContext<ProgramContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -35,7 +35,7 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        var context = services.GetRequiredService<MealContext>();
+        var context = services.GetRequiredService<ProgramContext>();
         context.Database.EnsureCreated();
         DbInitializer.Initialize(context);
     }
