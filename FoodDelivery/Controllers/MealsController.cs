@@ -205,11 +205,7 @@ namespace FoodDelivery.Controllers
         {
             return View(_context.Meals.FirstOrDefault(m => m.ID == id));
         }
-        public ActionResult getMeals(int res_id)
-        {
-            var meals = _context.Meals.Where(x => x.Restaurant_ID == res_id).Select(x => x);
-            return View("Index",meals);
-        }
+
         public ActionResult initiateAdditionToOrder(int id, string userName)
         {
             bool flag = _context.Meals.Any(e => e.ID == id);

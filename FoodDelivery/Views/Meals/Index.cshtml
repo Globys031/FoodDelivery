@@ -2,8 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    IEnumerable<Restaurant> restaurants = ViewData["Restaurants"] as IEnumerable<Restaurant>;
-    //IEnumerable<Meal> meals = ViewData["Meals"] as IEnumerable<Meal>;
 }
 
 <h1>List Of Meals</h1>
@@ -13,15 +11,7 @@
 {
     <p><a asp-action="Create">Create New Meal</a></p>
 }
-<h2>Please choose the restaurant</h2>
-@using(Html.BeginForm("getMeals","Meals", FormMethod.Post, new {id = "TheForm"}))
-{
-    @Html.DropDownList("RestaurantsData", 
-    (IEnumerable<SelectListItem>) ViewData["RestaurantsData"],"--Select One--",
-    new{onchange="document.getElementById('TheForm').submit();"})
 
-    <input type='submit' value='Select'/>
-}
 <table class="table">
     <thead>
         <tr>
