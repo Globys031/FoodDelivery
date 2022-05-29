@@ -1,25 +1,29 @@
-﻿@model FoodDelivery.Models.Payment
+﻿@model FoodDelivery.Models.Order
 
 @{
     ViewData["Title"] = "OrderPayment";
 }
 
 <h1>OrderPayment</h1>
-
 <h4>Payment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="OrderPayment">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden"  />
             <div class="form-group">
-                <label asp-for="PaymentDate" class="control-label"></label>
-                <input asp-for="PaymentDate" class="form-control" />
-                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                <label  class="control-label">Banko kortelės nr.</label>
+                <input  class="form-control" />
+                <span  class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label  class="control-label">Banko PIN</label>
+                <input  class="form-control" />
+                <span  class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-action="DoPayment" asp-route-id="@Model?.ID" type="submit" value="Pay" class="btn btn-primary" />
             </div>
         </form>
     </div>

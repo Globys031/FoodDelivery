@@ -154,8 +154,52 @@ namespace FoodDelivery.Controllers
             return _context.Orders.Any(e => e.ID == id);
         }
 
+        // this is where we fake the order state progression
+        private void hackyfunction(ProgramContext context)
+        {
+            const int chances = 1;
+            if(Random.Shared.Next(chances) == 0)
+            {
+                context.Orders.Where(order => order.State == Order.Order_State.delivering).ForEachAsync(x => x.State = Order.Order_State.delivered);
+                context.Orders.Where(order => order.State == Order.Order_State.paid_for).ForEachAsync(x => x.State = Order.Order_State.being_made);
+                context.SaveChanges();
+                //.Select(x => new Order { ID = x.ID, Order_date = x.Order_date, Payment_ID = x.Payment_ID});
+            }
+        }
+
         public ActionResult Index()
         {
+            const int chances = 5;
+            if (Random.Shared.Next(chances) == 0) // 1 is 5 sansas
+            {
+                var orders1 = _context.Orders.Where(order => order.State == Order.Order_State.delivering).AsEnumerable();
+                foreach(var order in orders1)
+                {
+                    order.State = Order.Order_State.delivered;
+                    _context.Orders.Update(order);
+                }
+                var orders4 = _context.Orders.Where(order => order.State == Order.Order_State.made).AsEnumerable();
+                foreach (var order in orders4)
+                {
+                    order.State = Order.Order_State.delivered;
+                    _context.Orders.Update(order);
+                }
+                var orders3 = _context.Orders.Where(order => order.State == Order.Order_State.being_made).AsEnumerable();
+                foreach (var order in orders3)
+                {
+                    order.State = Order.Order_State.made;
+                    _context.Orders.Update(order);
+                }
+                var orders2 = _context.Orders.Where(order => order.State == Order.Order_State.paid_for).AsEnumerable();
+                foreach (var order in orders2)
+                {
+                    order.State = Order.Order_State.being_made;
+                    _context.Orders.Update(order);
+                }
+                _context.SaveChanges();
+                //.Select(x => new Order { ID = x.ID, Order_date = x.Order_date, Payment_ID = x.Payment_ID});
+            }
+
             if (!User.IsInRole("Administrator")) 
             {// uzkomentavau nes nenutryniau carts
 /*                if (User.IsInRole("RestaurantRepresentative"))
@@ -183,7 +227,26 @@ namespace FoodDelivery.Controllers
         public ActionResult OrderPayment(int id)
         {
            
-            return View("Views/Shared/_LoginPartial");
+            return View(_context.Orders.Where(order => order.ID == id).SingleOrDefault());
+        }
+
+
+
+        public ActionResult DoPayment(int id)
+        {
+            var payment = new Payment()
+            { PaymentDate = DateTime.Now };
+            _context.Payments.Add(payment);
+            var order = _context.Orders.Where(order => order.ID == id).FirstOrDefault();
+            order.Payment_ID = payment.ID;
+            order.State = Order.Order_State.paid_for;
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+
+            var user_id = users.Users.Where(x => x.UserName == User.Identity.Name)
+                .Select(x => x.Id).SingleOrDefault();
+            var orders = _context.Orders.Where(x => x.User_ID == user_id);
+            return View("Index", orders);
         }
     }
 }
