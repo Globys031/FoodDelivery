@@ -256,7 +256,7 @@ namespace FoodDelivery.Controllers
             var user_id = users.Users.Where(x => x.UserName == User.Identity.Name)
                 .Select(x => x.Id).SingleOrDefault();
             var orders = _context.Orders.Where(x => x.User_ID == user_id);
-            return View("Index", orders);
+            return View("Index", orders.OrderByDescending(x => x.Order_date));
         }
     }
 }

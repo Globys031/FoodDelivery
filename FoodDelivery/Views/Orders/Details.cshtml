@@ -60,8 +60,8 @@
 <h3>Total Price: @Model.Total &euro;</h3>
 <div>
     <a asp-action="Index">Back to List</a> |
-    @if (@Model?.State == Order.Order_State.not_paid)
+    @if (@Model?.Order.State == Order.Order_State.not_paid)
     {
-        <a asp-action="OrderPayment" asp-route-id="@Model?.ID">Pay</a>
+        <a asp-action="OrderPayment" asp-route-id="@Model?.Order.ID">Pay</a>
      }
 </div>
