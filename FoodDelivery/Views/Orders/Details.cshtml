@@ -1,4 +1,5 @@
-﻿@model FoodDelivery.Models.Order
+﻿@*@model FoodDelivery.Models.Order*@
+@model FoodDelivery.Models.OrderDetailViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,21 +12,53 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Order_date)
+            @Html.DisplayNameFor(model => model.Order.Order_date)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Order_date)
+            @Html.DisplayFor(model => model.Order.Order_date)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.State)
+            @Html.DisplayNameFor(model => model.Order.State)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.State)
+            @Html.DisplayFor(model => model.Order.State)
         </dd>
     </dl>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Name")
+            </th>
+            <th>
+                @Html.DisplayName("Amount")
+            </th>
+            <th>
+                @Html.DisplayName("Price")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model.Info) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<h3>Total Price: @Model.Total &euro;</h3>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
     <a asp-action="Index">Back to List</a> |
-    <a asp-action="OrderPayment" asp-route-id="@Model?.ID">Pay</a>
+    <a asp-action="OrderPayment" asp-route-id="@Model?.Order.ID">Pay</a>
 </div>
