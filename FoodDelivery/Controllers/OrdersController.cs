@@ -169,7 +169,7 @@ namespace FoodDelivery.Controllers
 
         public ActionResult Index()
         {
-            const int chances = 5;
+            const int chances = 3;
             if (Random.Shared.Next(chances) == 0) // 1 is 5 sansas
             {
                 var orders1 = _context.Orders.Where(order => order.State == Order.Order_State.delivering).AsEnumerable();
@@ -217,7 +217,7 @@ namespace FoodDelivery.Controllers
                 {*/
                     var user_id = users.Users.Where(x => x.UserName == User.Identity.Name)
                         .Select(x => x.Id).SingleOrDefault();
-                var orders = _context.Orders.Where(x => x.User_ID == user_id);
+                var orders = _context.Orders.Where(x => x.User_ID == user_id).OrderByDescending(x => x.Order_date);
                     return View("Index", orders); 
            //     }
             }
