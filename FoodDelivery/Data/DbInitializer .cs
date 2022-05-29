@@ -9,6 +9,8 @@ namespace FoodDelivery.Data
         public static void Initialize(ProgramContext context)
         {
             context.Database.EnsureCreated();
+            context.Kazkass.Add(new Kazkas { });
+            context.SaveChanges();
             // Look for any meals.
             if (context.Meals.Any())
             {

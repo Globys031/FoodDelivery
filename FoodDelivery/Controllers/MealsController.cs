@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 using FoodDelivery.Controllers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodDelivery.Controllers
 {
@@ -24,7 +25,9 @@ namespace FoodDelivery.Controllers
         // GET: Meals
         public async Task<IActionResult> Index()
         {
-            ViewData["Restaurants"] = _context.Restaurants.Select(x => x);
+            var list = _context.Restaurants.Select(x => x).ToList();
+            var temp = list.Select(x => new SelectListItem { Value = x.ID.ToString(), Text = x.Name });
+            ViewData["RestaurantsData"] = temp;
             return View(await _context.Meals.ToListAsync());
         }
 
@@ -205,7 +208,7 @@ namespace FoodDelivery.Controllers
         public ActionResult getMeals(int res_id)
         {
             var meals = _context.Meals.Where(x => x.Restaurant_ID == res_id).Select(x => x);
-            return View(meals);
+            return View("Index",meals);
         }
         public ActionResult initiateAdditionToOrder(int id, string userName)
         {

@@ -14,14 +14,14 @@
     <p><a asp-action="Create">Create New Meal</a></p>
 }
 <h2>Please choose the restaurant</h2>
-@*@using(Html.BeginForm("getMeals","Meals", FormMethod.Get,new{id = 1}))
+@using(Html.BeginForm("getMeals","Meals", FormMethod.Post, new {id = "TheForm"}))
 {
-    Html.DropDownList("Name", 
-    (SelectList) ViewData["Restaurants"],"--Select One--");
+    @Html.DropDownList("RestaurantsData", 
+    (IEnumerable<SelectListItem>) ViewData["RestaurantsData"],"--Select One--",
+    new{onchange="document.getElementById('TheForm').submit();"})
 
     <input type='submit' value='Select'/>
-}*@
-
+}
 <table class="table">
     <thead>
         <tr>
