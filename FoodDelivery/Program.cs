@@ -32,37 +32,37 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var logger = services.GetRequiredService<ILogger<Program>>();
-
-    try
-    {
+    // nepatiko man tie try catch, nepastebedavau erroru del ju
+   // try
+   // {
         var context = services.GetRequiredService<ProgramContext>();
         context.Database.EnsureCreated();
         DbInitializer.Initialize(context);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while seeding the database with meal data.");
-    }
-    try
-    {
-        var context = services.GetRequiredService<ApplicationDbContext>();
+   // }
+    //catch (Exception ex)
+   // {
+       // logger.LogError(ex, "An error occurred while seeding the database with meal data.");
+   // }
+  //  try
+  //  {
+       var contexxt = services.GetRequiredService<ApplicationDbContext>();
         context.Database.EnsureCreated();
-        DbInitializer.InitializeRoles(context);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while seeding the database with roles.");
-    }
-    try
-    {
-        var context = services.GetRequiredService<ApplicationDbContext>();
+        DbInitializer.InitializeRoles(contexxt);
+   // }
+   // catch (Exception ex)
+   // {
+      //  logger.LogError(ex, "An error occurred while seeding the database with roles.");
+   // }
+   // try
+   // {
+      //  var context = services.GetRequiredService<ApplicationDbContext>();
         context.Database.EnsureCreated();
-        DbInitializer.InitializeUsers(context);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while seeding the database with users.");
-    }
+        DbInitializer.InitializeUsers(contexxt);
+   // }
+   // catch (Exception ex)
+   // {
+       // logger.LogError(ex, "An error occurred while seeding the database with users.");
+    //}
 }
 
 // Configure the HTTP request pipeline.

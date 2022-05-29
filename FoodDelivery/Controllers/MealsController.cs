@@ -198,9 +198,9 @@ namespace FoodDelivery.Controllers
         }
         //mano
 
-        public ActionResult MealView()
+        public ActionResult MealView(int id)
         {
-            return View();
+            return View(_context.Meals.FirstOrDefault(m => m.ID == id));
         }
         public ActionResult getMeals(int res_id)
         {
@@ -213,16 +213,15 @@ namespace FoodDelivery.Controllers
             if (flag)
             {
                 string userID = users.Users.Where(e => e.UserName == userName).Select(e => e.Id).SingleOrDefault();
-                int cartID = _context.Carts.Where(e => e.User_ID == userID && e.Cond == 0).Select(e => e.ID).SingleOrDefault();
-                if (cartID > 0)
-                {
-                    _context.OrderedMeals.Add(new OrderedMeal { Amount = 1, Meal_ID = id, Cart_ID = cartID });
-                    
+                int orderID = _context.Orders.Where(e => e.User_ID == userID && e.State == Order.Order_State.not_paid).Select(e => e.ID).SingleOrDefault();
+                if (orderID > 0)
+                {// jei randam notpaid order
+                    _context.OrderedMeals.Add(new OrderedMeal { Amount = 1, Meal_ID = id, Order_ID = orderID });
                 }
                 else
-                {
-                    _context.Carts.Add(new Cart { Sum = 0, Cond = 0, User_ID = userID });
-                    _context.OrderedMeals.Add(new OrderedMeal { Amount = 1, Meal_ID = id, Cart_ID = cartID });
+                {// jei nerandam sukuriam nauja order
+                    _context.Orders.Add(new Order { Order_date = DateTime.Now, State = Order.Order_State.not_paid, User_ID=userID});
+                    _context.OrderedMeals.Add(new OrderedMeal { Amount = 1, Meal_ID = id, Order_ID = orderID });
                 }
                 _context.SaveChanges();
                 return View("Index", _context.Meals.ToList());

@@ -157,20 +157,33 @@ namespace FoodDelivery.Controllers
         public ActionResult Index()
         {
             if (!User.IsInRole("Administrator")) 
-            {
-                if (User.IsInRole("RestaurantRepresentative"))
+            {// uzkomentavau nes nenutryniau carts
+/*                if (User.IsInRole("RestaurantRepresentative"))
                 {
+                    // fix this
                     var user_id = users.Users.Where(x => x.UserName == User.Identity.Name)
                         .Select(x => x.Id).SingleOrDefault();
                     var rez_id = _context.Restaurants.Where(x => x.User_ID == user_id)
                         .Select(x => x.ID).SingleOrDefault();
-                    var carts = _context.Carts.Where(x => x.Rest_ID == rez_id).Select(x => x.ID);
+                   // var carts = _context.Carts.Where(x => x.Rest_ID == rez_id).Select(x => x.ID);
                     var orders = _context.Orders.Where(x => carts.Contains(x.Cart_ID)).Select(x => x);
                     return View("Index",orders);
                 }
-                return View("Index"); 
+                else
+                {*/
+                    var user_id = users.Users.Where(x => x.UserName == User.Identity.Name)
+                        .Select(x => x.Id).SingleOrDefault();
+                var orders = _context.Orders.Where(x => x.User_ID == user_id);
+                    return View("Index", orders); 
+           //     }
             }
             else return View("Views/Shared/_LoginPartial");
+        }
+
+        public ActionResult OrderPayment(int id)
+        {
+           
+            return View("Views/Shared/_LoginPartial");
         }
     }
 }

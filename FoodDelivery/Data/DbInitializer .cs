@@ -35,25 +35,12 @@ namespace FoodDelivery.Data
 
             var restaurants = new Restaurant[]
             {
-            new Restaurant{Name="Fresh Spot",City="Kaunas",Address="K. Petrausko g. 26"},
-            new Restaurant{Name="American Pizza",City="Kaunas",Address="Vytauto pr. 60"},
+            new Restaurant{Name="Fresh Spot",City="Kaunas",Address="K. Petrausko g. 26", User_ID="d0ece1e8-3e37-4132-ab71-24179ab54ee6"},
+            new Restaurant{Name="American Pizza",City="Kaunas",Address="Vytauto pr. 60", User_ID="d0ece1e8-3e37-4132-ab71-24179ab54ee6"},
             };
             foreach (Restaurant restaurant in restaurants)
             {
                 context.Restaurants.Add(restaurant);
-            }
-            context.SaveChanges();
-
-            var orders = new Order[]
-            {
-            new Order{Order_date=DateTime.Parse("2005-09-01"),State=Order.Order_State.paid_for},
-            new Order{Order_date=DateTime.Parse("2015-10-02"),State=Order.Order_State.paid_for},
-            new Order{Order_date=DateTime.Parse("2020-09-11"),State=Order.Order_State.paid_for},
-            new Order{Order_date=DateTime.Parse("2022-04-04"),State=Order.Order_State.paid_for}
-            };
-            foreach (Order order in orders)
-            {
-                context.Orders.Add(order);
             }
             context.SaveChanges();
         }

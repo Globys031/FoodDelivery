@@ -4,6 +4,7 @@
     {
         public enum Order_State
         {
+            not_paid,
             paid_for,
             declined,
             being_made,
@@ -13,18 +14,11 @@
         }
 
         public int ID { get; set; }
+        public string User_ID { get; set; }
         public DateTime Order_date { get; set; }
 
         public Order_State State { get; set; }
-        public int Cart_ID { get; set; }
 
-        public void pakeistiBusena(Order_State nauja_busena) { }
-        public void pridetiPatiekalaPrieUzsakymo() { }
-        public void pasalintiPatiekalaIsUzsakymo() { }
-        public void checkAvailability() { }
-        public void getOrders() { }
-        public void updateOrderState() { }
-        public void assignCourier() { }
-        public void getOrder() { }
+        public int? Payment_ID { get; set; }
     }
 }

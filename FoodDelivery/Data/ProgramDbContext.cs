@@ -15,7 +15,6 @@ namespace FoodDelivery.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<OrderedMeal> OrderedMeals { get; set; }
-        public DbSet<Cart> Carts { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,7 +23,6 @@ namespace FoodDelivery.Data
             modelBuilder.Entity<Order>().ToTable("Order");
             modelBuilder.Entity<Restaurant>().ToTable("Restaurant");
             modelBuilder.Entity<OrderedMeal>().ToTable("Ordered_meal");
-            modelBuilder.Entity<Cart>().ToTable("Cart");
             modelBuilder.Entity<Payment>().ToTable("Payment");
         }
     }
